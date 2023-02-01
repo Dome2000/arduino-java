@@ -1,0 +1,40 @@
+#include "DHT.h"
+#define DHTPIN 2                  
+#define DHTTYPE DHT11         
+DHT dht(DHTPIN, DHTTYPE);        
+int LedRED = 3;
+int LedGREEN = 4;
+int buzzer_module = 5;
+
+void setup() {
+  Serial.begin(9600);             
+  dht.begin();                   
+  pinMode(LedRED,OUTPUT);
+  pinMode(LedGREEN,OUTPUT);
+  pinMode(buzzer_module,OUTPUT);
+  
+}
+
+void loop() {
+  delay(100);                              
+  float h = dht.readHumidity();             
+  float t = dht.readTemperature();
+  float f = dht.readTemperature(true);
+  Serial.println(h);
+  Serial.println(t);
+  Serial.println(f);                        
+  if(t > 33){
+    digitalWrite(LedRED,HIGH);
+    digitalWrite(LedGREEN,LOW);
+    digitalWrite(buzzer_module,HIGH);
+    tone (buzzer_module,9000);
+    delay(200);
+    noTone(buzzer_module);
+    delay(200);
+    }
+  else{
+    digitalWrite(LedGREEN,HIGH);
+    digitalWrite(LedRED,LOW);
+    digitalWrite(buzzer_module,LOW);
+    }
+}
